@@ -7,7 +7,6 @@ var losses = 0;
 var guesses = 9;
 var letters = [];
 var player = null;
-var sound = document.getElementById('sound');
 
 window.alert("Welcome crazy people, are you ready to be a Psychic? How to play: Press the any letters from a-z with lowercase, if your answer is equal to computer's guess then you are psychic and if it's not equal than better luck next time. Remember: you have 9 guesses only! Good luck!");
 
@@ -54,3 +53,4 @@ document.onkeyup = function (event) {
 
     document.querySelector("#game").innerHTML = html;
 } 
+
