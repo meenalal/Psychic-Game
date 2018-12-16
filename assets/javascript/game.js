@@ -1,79 +1,56 @@
-var lsgwoerter = [
-    ["A", "P", "P", "L", "E"],
-      ["M","A","N","G","O"],
-      ["O","R","A","N","G","E"],
-      ["P","I","N","E","A","P","P","L","E"],
-      ["C","H","E","R","R","Y"],
-      ["S","T","R","A","W","B","E","R","R","Y"]
-    ]
-    var random = Math.floor((Math.random()*(lsgwoerter.length-1))); 
+//An array of possible choices i.e. alphabet
+var alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
+
+//Player statistics variables for wins, losses, #guesses and letters entered
+var wins = 0;
+var losses = 0;
+var guesses = 9;
+var letters = [];
+var player = null;
+var sound = document.getElementById('sound');
+
+window.alert("Welcome crazy people, are you ready to be a Psychic? How to play: Press the any letters from a-z with lowercase, if your answer is equal to computer's guess then you are psychic and if it's not equal than better luck next time. Remember: you have 9 guesses only! Good luck!");
+
+//Press a key to make a guess (player) and compare to computer
+document.onkeyup = function (event) {
+    player = event.key.toLowerCase();
+   // String.fromCharCode(event.keyCode).toLowerCase();
     
-    var lsgwort = lsgwoerter[random]; // the word to guess will be chosen from the array above
-    var ratewort = new Array(lsgwort.length);
-    var fehler = 0;
-    
-    // every letter in the word is symbolized by an underscore in the guessfield
-    for (var i = 0; i < ratewort.length; i++){
-        ratewort[i] = "_ ";
+    var computer = alphabet[Math.floor(Math.random() * alphabet.length)];
+
+    //push guess to letter array
+    if (!(player >= 0)){
+    letters.push(player);
     }
+    //determine the result of player vs computer
+    if (player === computer && guesses > 0) {
+        wins++; 
+        alert("Good Job, you are a psychic!");
+        guesses = 9;
+        letters = [];
+
+    } else if(player >= 0){
+        alert('Oops! Invalid Entry');
     
-    // prints the guessfield
-    function printRatewort(){
-        for (var i = 0; i < ratewort.length; i++){
-        var ratefeld = document.getElementById("ratefeld");
-        var buchstabe = document.createTextNode(ratewort[i]);
-        ratefeld.appendChild(buchstabe);
-        }
+    } else if (player !== computer && guesses > 0) {
+        guesses = guesses - 1;
+
+    } else if (guesses === 0) {
+        losses++;
+        alert("You are not a psychic, you lost!");
+        guesses = 9;    
+        letters = [];
     }
-    
-    //checks if the the letter provided by the user matches one or more of the letters in the word
-    var pruefeZeichen = function(){
-        var f = document.rateformular; 
-        var b = f.elements["ratezeichen"]; 
-        var zeichen = b.value; // the letter provided by the user
-        zeichen = zeichen.toUpperCase();
-        for (var i = 0; i < lsgwort.length; i++){
-            if(lsgwort[i] === zeichen){
-                ratewort[i] = zeichen + " ";
-                var treffer = true;
-            }
-        b.value = "";
-        }
-        
-        //deletes the guessfield and replaces it with the new one
-        var ratefeld = document.getElementById("ratefeld");
-        ratefeld.innerHTML=""; 
-        printRatewort();
-        
-        // if a guessed letter is not in the word, the letter will be put on the "wrong letters"-list and hangman grows
-        if(!treffer){
-            var gerateneBuchstaben = document.getElementById("gerateneBuchstaben");
-            var buchstabe = document.createTextNode(" " + zeichen);
-            gerateneBuchstaben.appendChild(buchstabe); 
-            fehler++;
-            var hangman = document.getElementById("hangman");
-        hangman.src = "http://www.writteninpencil.de/Projekte/Hangman/hangman" + fehler + ".png";
-        }
-        
-        //checks if all letters have been found
-        var fertig = true;
-        for (var i = 0; i < ratewort.length; i++){
-            if(ratewort[i] === "_ "){
-                fertig = false;
-            }
-        }
-        if(fertig){
-            window.alert("You win!");
-        }
-        
-        //once you got six wrong letters, you lose
-        if(fehler === 6){
-            window.alert("Uh...I guess you're dead now.");
-        }
-    }
-    
-    function init(){
-        printRatewort();
-    }
-    
-    window.onload = init;
+      console.log(letters)
+
+    //Placing the HTML into the game id
+    var html = 
+    "<h1>The Psychic Game</h1>" +
+    "<p>Can you guess what letter I am thinking of ?</p>" +
+    "<p>Wins: " + wins + "</p>" +
+    "<p>Losses: " + losses + "</p>" +
+    "<p>Remaining Guesses: " + guesses + "</p>" +
+    "<p>Guesses used: " + letters + "</p>";
+
+    document.querySelector("#game").innerHTML = html;
+} 
